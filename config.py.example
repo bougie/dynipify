@@ -1,0 +1,8 @@
+# List of all records to update with the SAME current IP Address
+DYNHOSTS = [
+	# {'domain': 'domain.tld', 'subdomain': 'sub'},
+]
+
+# Log level
+# CRITICAL, ERROR, WARNING, INFO, DEBUG
+LOG_LEVEL = 'INFO'

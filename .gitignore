@@ -1,0 +1,5 @@
+*.pyc
+config.py
+ovh.conf
+__pycache__
+.ropeproject
