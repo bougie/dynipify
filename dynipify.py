@@ -9,7 +9,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-class DnsAPI(object):
+class DynhostWrapper(object):
     '''
     manage dynhost record via OVH REST API
     '''
@@ -224,8 +224,8 @@ def main(dynhosts=None):
     if _config.get(_config.get('default', 'endpoint'), 'consumer_key') is None:
         return 1
 
-    dnsapi = DnsAPI(dynhosts=dynhosts)
-    dnsapi.update()
+    dynapi = DynhostWrapper(dynhosts=dynhosts)
+    dynapi.update()
 
     return 0
 
