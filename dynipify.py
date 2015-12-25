@@ -3,6 +3,7 @@ import requests
 import ovh
 import ipaddress
 import logging
+import argparse
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(module)s %(message)s')
 logger = logging.getLogger()
@@ -237,9 +238,9 @@ def get_current_ip():
         return ip
 
 
-def main(dynhosts=None):
+def update(dynhosts=None, args=None):
     '''
-    main function
+    update function
     '''
     # check if a consumer key was supplied
     _config = ovh.config.config
@@ -254,15 +255,54 @@ def main(dynhosts=None):
     return 0
 
 
+def request(dynhosts=None, args=None):
+    '''
+    request function
+    '''
+    dynapi = DynhostWrapper(dynhosts=dynhosts)
+    dynapi.request_consumer_key()
+
+    return 0
+
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description='update a DYNHOST field with the OVH API')
+    parser.add_argument(
+        '-l', '--level',
+        choices=['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG'])
+
+    # command parser
+    subparsers = parser.add_subparsers(title='Available commands',
+                                       help='command description')
+    # consumer key handler
+    parser_auth = subparsers.add_parser('auth', help='request a consumer_key')
+    parser_auth.set_defaults(func=request)
+    # update handler
+    parser_update = subparsers.add_parser('update', help='update DNS records')
+    parser_update.set_defaults(func=update)
+
+    args = parser.parse_args()
+
     try:
         import config
-    except:
+    except ImportError:
         logger.critical('Config file was not found')
         sys.exit(1)
+    except Exception as e:
+        logger.critical('unknown error while launching program')
+        logger.debug(e)
+        sys.exit(1)
     else:
+        # setting log level according to value specified in command line
+        if hasattr(args, 'level'):
+            logger.setLevel(getattr(logging, args.level))
         # setting log level according to value specified in config file
-        if hasattr(config, 'LOG_LEVEL'):
+        elif hasattr(config, 'LOG_LEVEL'):
             logger.setLevel(getattr(logging, config.LOG_LEVEL))
 
-        sys.exit(main(dynhosts=config.DYNHOSTS))
+        if hasattr(args, 'func'):
+            sys.exit(args.func(dynhosts=config.DYNHOSTS, args=args))
+        else:
+            # no command name supplied : display help message
+            parser.print_help()
