@@ -295,7 +295,7 @@ if __name__ == "__main__":
         sys.exit(1)
     else:
         # setting log level according to value specified in command line
-        if hasattr(args, 'level'):
+        if hasattr(args, 'level') and args.level is not None:
             logger.setLevel(getattr(logging, args.level))
         # setting log level according to value specified in config file
         elif hasattr(config, 'LOG_LEVEL'):
