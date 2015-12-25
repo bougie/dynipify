@@ -76,10 +76,9 @@ class DynhostWrapper(object):
                     subdomain))
 
             if len(dynhostid) > 1:
-                logger.debug(dynhostid)
-                raise ValueError('too much records found')
+                raise ValueError('too much records found (%s)' % str(dynhostid))
             elif len(dynhostid) == 0:
-                raise ValueError('no records found')
+                raise ValueError('no record found')
         except ovh.HTTPError as e:
             logger.error(
                 'Unable to get record ID for given zonename %s and subdomain %s'
@@ -90,6 +89,11 @@ class DynhostWrapper(object):
                 'Invalid respond while getting record ID '
                 'for given zonename %s and subdomain %s' % (zonename,
                                                             subdomain))
+            logger.debug(e)
+        except ValueError as e:
+            logger.error(
+                'Erroneous records retrieve for given zonename %s'
+                'and subdomain %s' % (zonename, subdomain))
             logger.debug(e)
         except Exception as e:
             logger.error(
