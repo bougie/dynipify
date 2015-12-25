@@ -81,18 +81,20 @@ class DynhostWrapper(object):
                 raise ValueError('no records found')
         except ovh.HTTPError as e:
             logger.error(
-                'unable to get record ID for given %s zonename '
-                'for network reason' % zonename)
+                'unable to get record ID for given zonename %s and subdomain %s'
+                'for network reason' % (zonename, subdomain))
             logger.debug(e)
         except ovh.InvalidResponse:
             logger.error(
                 'invalid respond while getting record ID '
-                'for given zonename' % zonename)
+                'for given zonename %s and subdomain %s' % (zonename,
+                                                            subdomain))
             logger.debug(e)
         except Exception as e:
             logger.error(
                 'unknown error while getting record ID '
-                'for zonename %s' % zonename)
+                'for given zonename %s and subdomain %s' % (zonename,
+                                                            subdomain))
             logger.debug(e)
         else:
             recid = dynhostid[0]
@@ -114,13 +116,19 @@ class DynhostWrapper(object):
                 zonename,
                 recid))
         except ovh.HTTPError as e:
-            logger.error('unable to get record %s for network reason' % recid)
+            logger.error(
+                'unable to get record %s for network reason '
+                'on zonename %s' % (recid, zonename))
             logger.debug(e)
         except ovh.InvalidResponse:
-            logger.error('invalid respond while getting record %s' % recid)
+            logger.error(
+                'invalid respond while getting record ID %s '
+                'on zonename %s' % (recid, zonename))
             logger.debug(e)
         except Exception as e:
-            logger.error('unknown error while getting record %s' % recid)
+            logger.error(
+                'unknown error while getting record ID %s '
+                'on zonename %s' % (recid, zonename))
             logger.debug(e)
         finally:
             return rec
@@ -149,7 +157,8 @@ class DynhostWrapper(object):
                             zonename=host.get('domain'),
                             recid=recid)
                 except Exception as e:
-                    logger.error(e)
+                    logger.error('Unable to retrieve informations for update')
+                    logger.debug(e)
                 else:
                     if 'ip' in rec and rec['ip'] != self._ip:
                         logger.debug('Record %s need an update' % str(host))
@@ -168,9 +177,11 @@ class DynhostWrapper(object):
         if self._client is None:
             self.connect()
 
-        logger.info('Update dynhost record %s:%s with IP %s' % (zonename,
-                                                                recid,
-                                                                ip))
+        logger.info(
+            'Update dynhost record ID %s on zonename %s with IP %s' % (
+                recid,
+                zonename,
+                ip))
 
         try:
             self._client.put(
@@ -178,13 +189,20 @@ class DynhostWrapper(object):
                 **{'ip': ip})
         except ovh.HTTPError as e:
             logger.error(
-                'unable to update record %s for network reason' % recid)
+                'unable to update record ID %s on zonename %s for network '
+                'reason' % (recid, zonename))
             logger.debug(e)
         except ovh.InvalidResponse:
-            logger.error('invalid respond while updating record %s' % recid)
+            logger.error(
+                'invalid respond while updating record ID %s on zonename %s' % (
+                    recid,
+                    zonename))
             logger.debug(e)
         except Exception as e:
-            logger.error('unknown error while updating record %s' % recid)
+            logger.error(
+                'unknown error while updating record ID %s on zonename %s' % (
+                    recid,
+                    zonename))
             logger.debug(e)
 
 
@@ -198,19 +216,23 @@ def get_current_ip():
     try:
         req = requests.get('https://api.ipify.org')
     except Exception as e:
-        logger.error(e)
+        logger.error('Unable to get current IP Address from ipify')
+        logger.debug(e)
     else:
         if req.status_code == 200:
             try:
                 ipaddress.IPv4Address(req.text)
             except ipaddress.AddressValueError:
                 logger.error('Current IP Address %s is invalid' % req.text)
-            except:
-                logger.error(e)
+            except Exception as e:
+                logger.error('Unknown IP Address returned by ipify')
+                logger.debug(e)
             else:
                 ip = req.text
         else:
-            logger.error('Unable to get current IP Address')
+            logger.error(
+                'Bad response from server while getting current IP Address '
+                'from ipify')
     finally:
         return ip
 
@@ -222,6 +244,8 @@ def main(dynhosts=None):
     # check if a consumer key was supplied
     _config = ovh.config.config
     if _config.get(_config.get('default', 'endpoint'), 'consumer_key') is None:
+        logger.critical(
+            'you must purchase a consumer_key before starting update')
         return 1
 
     dynapi = DynhostWrapper(dynhosts=dynhosts)
@@ -234,7 +258,7 @@ if __name__ == "__main__":
     try:
         import config
     except:
-        logger.error('Config file was not found')
+        logger.critical('Config file was not found')
         sys.exit(1)
     else:
         # setting log level according to value specified in config file
