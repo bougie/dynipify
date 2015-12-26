@@ -17,13 +17,10 @@ class DynhostWrapper(object):
 
     def __init__(self, ip=None, dynhosts=None):
         '''
-        constructor
+        __init__
 
-        ip
-            current ip address
-
-        dynhosts
-            list of all domains to update
+        :param str ip: current ip address
+        :param list dynhosts:list of all domains to update
         '''
         self._ip = ip
         self._client = None
@@ -55,13 +52,12 @@ class DynhostWrapper(object):
 
     def get_record_id(self, zonename, subdomain):
         '''
-        return record ID for a given `zonename` and `subdomain`
+        return record ID for a given ``zonename`` and ``subdomain``
 
-        zonename
-            zone name (for example: domain.tld)
-
-        subdomain
-            sub-domain name (ex: sub if fqdn is sub.domain.tld)
+        :param str zonename: zone name (for example: domain.tld)
+        :param str subdomain: subdomain name (ex: sub if fqdn is sub.domain.tld)
+        :return: the record ID
+        :rtype: long
         '''
         if self._client is None:
             self.connect()
@@ -108,7 +104,12 @@ class DynhostWrapper(object):
 
     def get_record(self, zonename, recid):
         '''
-        return record values for a given record `recid` in a given `zonename`
+        return record values for a given ID ``recid`` in a given ``zonename``
+
+        :param str zonename: zone name (for example: domain.tld)
+        :param long recid: record ID in ``zonename``
+        :return: record
+        :rtype: dict
         '''
         if self._client is None:
             self.connect()
@@ -178,6 +179,10 @@ class DynhostWrapper(object):
     def update_record_ip(self, zonename, recid, ip):
         '''
         update IP Address for a given `recid` in a given `zonename`
+
+        :param str zonename: zone name (for example: domain.tld)
+        :param long recid: record ID in ``zonename``
+        :param str ip: new IP dddress
         '''
         if self._client is None:
             self.connect()
@@ -245,6 +250,13 @@ def get_current_ip():
 def update(dynhosts=None, args=None):
     '''
     update function
+
+    :param dynhosts: list of records to update
+    :type dynhosts: list or None
+    :param args: command line arguments if needed
+    :type args: dict or None
+    :return: execution status
+    :rtype: int
     '''
     # check if a consumer key was supplied
     _config = ovh.config.config
@@ -262,6 +274,13 @@ def update(dynhosts=None, args=None):
 def request(dynhosts=None, args=None):
     '''
     request function
+
+    :param dynhosts: list of records to update
+    :type dynhosts: list or None
+    :param args: command line arguments if needed
+    :type args: dict or None
+    :return: execution status
+    :rtype: int
     '''
     dynapi = DynhostWrapper(dynhosts=dynhosts)
     dynapi.request_consumer_key()
