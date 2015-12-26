@@ -47,10 +47,37 @@ Copy ``ovh.conf.example`` to ``ovh.conf`` in three of the next locations:
 - Current user's home directory: ``~/.ovh.conf``
 - System wide configuration: ``/etc/ovh.conf``
 
+File looks like:
+
+.. code:: ini
+
+    [default]
+    ; general configuration: default endpoint
+    endpoint=ovh-eu
+    
+    [ovh-eu]
+    ; configuration specific to 'ovh-eu' endpoint
+    application_key=my_app_key
+    application_secret=my_application_secret
+    consumer_key=my_consumer_key
+
 2. Dynipify Settings
 ********************
 
 Copy ``config.py.sample`` to ``config.py`` in the dynipify source directory
+
+Config file looks like:
+
+.. code:: python
+
+    # List of all records to update with the SAME current IP Address
+    DYNHOSTS = [
+    # {'domain': 'domain.tld', 'subdomain': 'sub'},
+    ]
+    
+    # Log level
+    # CRITICAL, ERROR, WARNING, INFO, DEBUG
+    LOG_LEVEL = 'INFO'
 
 3. Appplication key
 *******************
