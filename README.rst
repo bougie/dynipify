@@ -73,8 +73,28 @@ And follow steps on the screen.
 Usage
 -----
 
-Simply launch the next command to update all your records specified in config.py:
+All next commands assume that you have a working python environment
+(with virtualenv for example):
+
+.. code:: bash
+
+    . ~/.python/dynipify/bin/activate
+
+Update
+******
+
+Simply launch the ``update`` command to update all your records specified in config.py:
 
 .. code:: bash
 
     python dynipify.py update
+
+
+Auth
+****
+
+``auth`` is used when you have to purchase a consummer_key for the script (new or renew it):
+
+.. code:: bash
+
+    python dynipify.py auth
