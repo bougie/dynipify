@@ -11,28 +11,28 @@ First, get sources from github:
 
 .. code:: bash
 
-    # git clone https://github.com/bougie/dynipify.git
+    git clone https://github.com/bougie/dynipify.git
 
 It is recommended to run dynipify in a separate virtualenv.
 Create a virtual environment :
 
 .. code:: bash
 
-    # virtualenv --python=/path/to/python3 ~/.python/dynipify
+    virtualenv --python=/path/to/python3 ~/.python/dynipify
 
 Then, activate it and install all dependancies of dynipify:
 
 .. code:: bash
 
-    # . ~/.python/dynipify/bin/activate
-    (dynipify)# pip install -r requirements.txt
+    . ~/.python/dynipify/bin/activate
+    pip install -r requirements.txt
 
 You have now a running environment ! Check it with showing help message
 of the command:
 
 .. code:: bash
 
-    (dynipify)# python dynipify.py --help
+    python dynipify.py --help
 
 No error should appear.
 
@@ -66,7 +66,7 @@ Request a consummer_key by using embded command in dynipify:
 
 .. code:: bash
 
-    (dynipify)# python dynipify.py auth
+    python dynipify.py auth
 
 And follow steps on the screen.
 
@@ -77,4 +77,4 @@ Simply launch the next command to update all your records specified in config.py
 
 .. code:: bash
 
-    (dynipify)# python dynipify.py update
+    python dynipify.py update
