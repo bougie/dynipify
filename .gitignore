@@ -3,3 +3,5 @@ config.py
 ovh.conf
 __pycache__
 .ropeproject
+docs/_*
+docs/.doctrees*
