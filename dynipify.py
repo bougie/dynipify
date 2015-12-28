@@ -1,13 +1,17 @@
 import sys
+import os
 import requests
 import ovh
 import ipaddress
 import logging
 import argparse
 
-logging.basicConfig(format='%(asctime)s %(levelname)s %(module)s %(message)s')
+logging.basicConfig(
+    format='%(asctime)s %(levelname)s %(module)s %(message)s',
+    filename=os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                          'dynipify.log'),
+    lebel=logging.DEBUG)
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
 
 
 class DynhostWrapper(object):
