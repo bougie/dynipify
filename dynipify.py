@@ -287,9 +287,17 @@ def request(dynhosts=None, args=None):
     :rtype: int
     '''
     dynapi = DynhostWrapper(dynhosts=dynhosts)
-    dynapi.request_consumer_key()
+    ret = dynapi.request_consumer_key()
+    if ret is not None:
+        if 'consumerKey' in ret:
+            print('Your consumer_key is: %s' % ret['consumerKey'])
+        if 'validationUrl' in ret:
+            print()
+            print('Please go to the next page to validate your token: %s' % (
+                ret['validationUrl'],))
 
-    return 0
+        return 0
+    return 1
 
 
 if __name__ == "__main__":
