@@ -164,6 +164,8 @@ class DynhostWrapper(object):
                         rec = self.get_record(
                             zonename=host.get('domain'),
                             recid=recid)
+                    else:
+                        raise Exception('Unable to get recid')
                 except Exception as e:
                     logger.error('Unable to retrieve informations for update')
                     logger.debug(e)
