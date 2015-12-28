@@ -44,8 +44,10 @@ class DynhostWrapper(object):
         logger.debug('Requesting new consumer API key')
 
         access_rules = [
-            {'method': 'GET', 'path': '/domain/zone/*'},
-            {'method': 'PUT', 'path': '/domain/zone/*'},
+            {'method': 'GET', 'path': '/domain/zone/*/dynHost/record'},
+            {'method': 'PUT', 'path': '/domain/zone/*/dynHost/record'},
+            {'method': 'GET', 'path': '/domain/zone/*/dynHost/record/*'},
+            {'method': 'PUT', 'path': '/domain/zone/*/dynHost/record/*'},
         ]
 
         return self._client.request_consumerkey(access_rules)
