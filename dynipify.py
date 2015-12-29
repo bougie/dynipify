@@ -10,7 +10,7 @@ logging.basicConfig(
     format='%(asctime)s %(levelname)s %(module)s %(message)s',
     filename=os.path.join(os.path.dirname(os.path.dirname(__file__)),
                           'dynipify.log'),
-    lebel=logging.DEBUG)
+    level=logging.DEBUG)
 logger = logging.getLogger()
 
 
