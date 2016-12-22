@@ -48,6 +48,7 @@ class DynhostWrapper(object):
         logger.debug('Requesting new consumer API key')
 
         access_rules = [
+            {'method': 'POST', 'path': '/domain/zone/*/refresh'},
             {'method': 'GET', 'path': '/domain/zone/*/dynHost/record'},
             {'method': 'PUT', 'path': '/domain/zone/*/dynHost/record'},
             {'method': 'GET', 'path': '/domain/zone/*/dynHost/record/*'},
@@ -205,7 +206,7 @@ class DynhostWrapper(object):
             self._client.put(
                 '/domain/zone/%s/dynHost/record/%s' % (zonename, recid),
                 **{'ip': ip})
-            self._client.post('/domain/zone/%s' % zonename)
+            self._client.post('/domain/zone/%s/refresh' % zonename)
         except ovh.HTTPError as e:
             logger.error(
                 'Unable to update record ID %s on zonename %s for network '
