@@ -205,6 +205,7 @@ class DynhostWrapper(object):
             self._client.put(
                 '/domain/zone/%s/dynHost/record/%s' % (zonename, recid),
                 **{'ip': ip})
+            self._client.post('/domain/zone/%s' % zonename)
         except ovh.HTTPError as e:
             logger.error(
                 'Unable to update record ID %s on zonename %s for network '
